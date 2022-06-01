@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="../css/dialog.css">
+</head>
+<body>
+  
+
+
+  <div class="header">
+    啥都有 · 后台管理系统
+    <div>
+      <span class="nickname">昵称</span>
+      <a href="javascript:;">个人中心</a>
+      <button>注销登录</button>
+    </div>
+  </div>
+  <div class="content">
+    <ul class="nav">
+      <li class="active">用户相关</li>
+      <li>轮播图相关</li>
+      <li>商品列表</li>
+      <li>权限管理</li>
+    </ul>
+    <ol class="box">
+      <li class="users active">
+        <div class="title">用户管理</div>
+
+        <div class="add">
+          <button>添加新用户</button>
+        </div>
+
+        <!-- 分页器 -->
+        <div class="pagination">
+
+        </div>
+
+        <!-- 筛选框 -->
+        <div class="filter_box">
+
+        </div>
+
+        <!-- 展示用户列表 -->
+        <table class="users_list" border="1" cellspacing="0">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>头像</th>
+              <th>用户名</th>
+              <th>密码</th>
+              <th>昵称</th>
+              <th>描述</th>
+              <th>年龄</th>
+              <th>性别</th>
+              <th>状态</th>
+              <th>注册时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </li>
+      <li class="banner">
+        <div class="title">轮播图管理</div>
+        <!-- 添加一张轮播图使用 -->
+        <form class="add form">
+          <label class="show">
+            <div></div>
+            <input name="banner" type="file">
+          </label>
+          <label>
+            标题 : <input name="title" type="text">
+          </label>
+          <label>
+            连接 : <input name="link" type="text">
+          </label>
+          <button>确认添加</button>
+        </form>
+
+        <!-- 编辑轮播图使用 -->
+        <form class="edit form">
+          <label class="show">
+            <div></div>
+            <input name="banner" type="file">
+          </label>
+          <label>
+            标题 : <input class="title" name="title" type="text">
+          </label>
+          <label>
+            连接 : <input class="link" name="link" type="text">
+          </label>
+          <button class="update">确认编辑</button>
+          <button class="cancel">取消编辑</button>
+        </form>
+
+        <!-- 展示轮播图列表 -->
+        <table class="banner_list" border="1" cellspacing="0">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>标题</th>
+              <th>图片</th>
+              <th>连接</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </li>
+      <li>商品列表</li>
+      <li>权限管理</li>
+    </ol>
+  </div>
+
+  <!-- 轮播图列表模板 -->
+  <script type="text/html" id="list_template">
+    {{ each list }}
+    <tr height="100">
+      <td width="60">{{ $index + 1 }}</td>
+      <td width="120">{{ $value.title }}</td>
+      <td width="200">
+        <img src="http://localhost:8080{{ $value.img_url }}" alt="">
+      </td>
+      <td>
+        {{ $value.link }}
+      </td>
+      <td width="200">
+        <button class="edit" data-id="{{ $value.id }}">编辑</button>
+        <button class="del" data-id="{{ $value.id }}">删除</button>
+      </td>
+    </tr>
+    {{ /each }}
+  </script>
+
+  <!-- 用户列表模板 -->
+  <script type="text/html" id="users_template">
+  
+    {{ each list }}
+    <tr height="120">
+      <td width="60">{{ $index + 1 }}</td>
+      <td width="120">
+        <img src="http://localhost:8080{{ $value.avatar }}" alt="">
+      </td>
+      <td width="120">{{ $value.username }}</td>
+      <td width="120">{{ $value.password }}</td>
+      <td width="120">{{ $value.nickname }}</td>
+      <td width="240" align="left">{{ $value.desc }}</td>
+      <td width="60">{{ $value.age }}</td>
+      <td width="60">{{ $value.gender }}</td>
+      <td width="100">
+        <select data-id="{{ $value.id }}">
+          <option value="禁用" {{ $value.is_status === false ? 'selected' : '' }}>禁用</option>
+          <option value="启用" {{ $value.is_status === true ? 'selected' : '' }}>启用</option>
+        </select>
+      </td>
+      <td width="240">{{ $value.createTime }}</td>
+      <td width="120">
+        <button data-id="{{ $value.id }}" class="resetInfo">重置</button>
+        <button data-id="{{ $value.id }}" class="editInfo">编辑</button>
+        <button data-id="{{ $value.id }}" class="deleteInfo">删除</button>
+      </td>
+    </tr>
+    {{ /each }}
+  </script>
+
+  <!-- 分页器模板 -->
+  <script type="text/html" id="users_pagination">
+    <span>{{ list_info.current }} / {{ total }}</span>
+
+    <span class="first{{ list_info.current === 1 ? ' disable' : '' }}">首页</span>
+    <span class="prev{{ list_info.current === 1 ? ' disable' : '' }}">&lt;</span>
+
+    <!--
+      约定: 最多放多少个按钮
+      总页数不够 9 页
+        => 一共多少页就多少个按钮
+      总是够 9 页
+        => 当前是 第 1 2 3 4 页
+          -> 1 2 3 4 5 ... 倒数第二页 倒数第一页
+        => 当前是 第 5 页
+          -> 1 2 3 4 5 6 7 ... 倒数第二页 倒数第一页
+        => 当前是 倒数第四页 倒数第三页 倒数第二页 倒数第一页
+          -> 1 2 ... 倒数第五页 倒数第四页 倒数第三页 倒数第二页 倒数第一页
+        => 当前是 倒数第五页
+          -> 1 2 ... 倒数第七页 倒数第六页 倒数第五页 倒数第四页 倒数第三页 倒数第二页 倒数第一页
+        => 在中间的页数
+          -> 1 2 ... 当前页的前二 当前页的前一 当前页 当前页的后一 当前页的后二 ... 倒数第二页 倒数第一页
+    -->
+    <ul>
+      {{ if total <= 9 }}
+        <% for (let i = 0; i < total; i++) { %>
+        <%- `<li class="item${ i + 1 === list_info.current ? ' active' : '' }">${ i + 1 }</li>` %>
+        <% } %>
+      {{ else }}
+        {{ if list_info.current < 5 }}
+          <% for (let i = 0; i < 5; i++) { %>
+          <%- `<li class="item${ i + 1 === list_info.current ? ' active' : '' }">${ i + 1 }</li>` %>
+          <% } %>
+          <li class="other">...</li>
+          <% for (let i = 1; i >= 0; i--) { %>
+          <%- `<li class="item">${ total - i }</li>` %>
+          <% } %>
+        {{ else if list_info.current === 5 }}
+          <% for (let i = 0; i < 7; i++) { %>
+          <%- `<li class="item${ i + 1 === list_info.current ? ' active' : '' }">${ i + 1 }</li>` %>
+          <% } %>
+          <li class="other">...</li>
+          <% for (let i = 1; i >= 0; i--) { %>
+          <%- `<li class="item">${ total - i }</li>` %>
+          <% } %>
+        {{ else if list_info.current === total - 4 }}
+          <% for (let i = 0; i < 2; i++) { %>
+          <%- `<li class="item">${ i + 1 }</li>` %>
+          <% } %>
+          <li class="other">...</li>
+          <% for (let i = 6; i >= 0; i--) { %>
+          <%- `<li class="item${ list_info.current === total - i ? ' active' : '' }">${ total - i }</li>` %>
+          <% } %>
+        {{ else if list_info.current > total - 4 }}
+          <% for (let i = 0; i < 2; i++) { %>
+          <%- `<li class="item">${ i + 1 }</li>` %>
+          <% } %>
+          <li class="other">...</li>
+          <% for (let i = 4; i >= 0; i--) { %>
+          <%- `<li class="item${ list_info.current === total - i ? ' active' : '' }">${ total - i }</li>` %>
+          <% } %>
+        {{ else }}
+          <% for (let i = 0; i < 2; i++) { %>
+          <%- `<li class="item">${ i + 1 }</li>` %>
+          <% } %>
+          <li class="other">...</li>
+          <% for (let j = list_info.current - 2; j <= list_info.current + 2; j++) { %>
+            <%- `<li class="item${ list_info.current === j ? ' active' : '' }">${ j }</li>` %>
+          <% } %>
+          <li class="other">...</li>
+          <% for (let i = 1; i >= 0; i--) { %>
+          <%- `<li class="item">${ total - i }</li>` %>
+          <% } %>
+        {{ /if }}
+      {{ /if }}
+    </ul>
+
+    <span class="next{{ list_info.current === total ? ' disable' : '' }}">&gt;</span>
+    <span data-total="{{ total }}" class="last{{ list_info.current === total ? ' disable' : '' }}">尾页</span>
+
+    <input type="text" value="{{ list_info.current }}">
+    <button data-total="{{ total }}" class="go">跳转</button>
+  </script>
+
+  <!-- 筛选框模板 -->
+  <script type="text/html" id="users_filter">
+    <input class="search" type="text" value="{{ list_info.search }}">
+    <select class="status">
+      <option value="all">全部</option>
+      <option value="0" {{ list_info.is_status === '0' ? 'selected' : '' }}>禁用</option>
+      <option value="1" {{ list_info.is_status === '1' ? 'selected' : '' }}>启用</option>
+    </select>
+    <select class="gender" >
+      <option value="all">全部</option>
+      <option value="保密" {{ list_info.gender === '保密' ? 'selected' : '' }}>保密</option>
+      <option value="男" {{ list_info.gender === '男' ? 'selected' : '' }}>男</option>
+      <option value="女" {{ list_info.gender === '女' ? 'selected' : '' }}>女</option>
+    </select>
+    <select class="pagesize">
+      <option value="5" {{ list_info.pagesize === 5 ? 'selected' : '' }}>5</option>
+      <option value="10" {{ list_info.pagesize === 10 ? 'selected' : '' }}>10</option>
+      <option value="15" {{ list_info.pagesize === 15 ? 'selected' : '' }}>15</option>
+      <option value="20" {{ list_info.pagesize === 20 ? 'selected' : '' }}>20</option>
+    </select>
+    <button>搜索</button>
+  </script>
+
+
+  <!-- ⭐简单模态框编辑信息⭐ -->
+    <dialog class="dialogEdit" open style="position: fixed;">
+      <div class="dialog" style="display: flex; flex-direction: column;">
+        <form>
+          <label form="editForm" for="avatar">
+            <input id="avatar" type="file" name="avatarEdit" style="display: none;">
+            <img class="avatar" src="">
+          </label>
+          <label form="editForm" for="username">
+              <span>用户名：</span>
+              <input id="username" class="username" type="text" name="username" autocomplete="off" value="">
+          </label>
+          <label form="editForm">
+              <span>密码：</span>
+              <input class="password" type="password" name="password" autocomplete="off">
+          </label>
+          <label form="editForm">
+              <span>确认密码：</span>
+              <input class="repassword" type="password" name="repassword" autocomplete="off">
+          </label>
+          <label form="editForm">
+              <span>昵称</span>
+              <input class="nickname" type="text" name="nickname" autocomplete="off">
+          </label>
+          <label form="editForm">
+              <span>年龄</span>
+              <input class="age" type="number" name="age" autocomplete="off">
+          </label>
+          <label form="editForm">
+              <span>性别</span>
+              <select class="gender" name="gender" id="">
+                  <option value="保密">保密</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+              </select>
+          </label>
+          <label form="editForm">
+            个人描述
+            <textarea style="resize: none; font-size: 10px;" name="desc" id="desc" cols="38" rows="3"></textarea>
+          </label>
+          <div>
+              <button class="editBtn">提交</button>
+              <button class="editCancle">取消</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- ⭐HTML原生模态框 添加用户⭐ -->
+    <dialog class="dialogAdd" open style="position: fixed;">
+      <div class="dialog" style="display: flex; flex-direction: column;">
+        <form class="addForm">
+          <label form="editAdd" for="avatarAdd">
+            <input id="avatarAdd" type="file" name="avatarAdd" style="display: none;">
+            <img class="avatar" src="">
+          </label>
+          <label form="editAdd" for="username">
+              <span>用户名：</span>
+              <input id="usernameAdd" class="username" type="text" name="username" autocomplete="off" value="">
+          </label>
+          <label form="editAdd">
+              <span>密码：</span>
+              <input class="password" type="password" name="password" autocomplete="off">
+          </label>
+          <label form="editAdd">
+              <span>确认密码：</span>
+              <input class="repassword" type="password" name="repassword" autocomplete="off">
+          </label>
+          <label form="editAdd">
+              <span>昵称</span>
+              <input class="nickname" type="text" name="nickname" autocomplete="off">
+          </label>
+          <label form="editAdd">
+              <span>年龄</span>
+              <input class="age" type="number" name="age" autocomplete="off">
+          </label>
+          <label form="editAdd">
+              <span>性别</span>
+              <select class="gender" name="gender" id="genderAdd">
+                  <option value="保密">保密</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+              </select>
+          </label>
+          <label form="editAdd">
+            个人描述
+            <textarea style="resize: none; font-size: 10px;" name="desc" id="descAdd" cols="38" rows="3"></textarea>
+          </label>
+          <div>
+              <button class="addBtn">提交</button>
+              <button class="addCancle">取消</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+  <script src="../js/template-web.js"></script>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/index.js"></script>
+  <script src="../js/edit.js"></script>
+  <script src="../js/addUser.js"></script>
+</body>
+</html>

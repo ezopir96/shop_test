@@ -1,0 +1,36 @@
+dialog {
+    display: none;
+    position: fixd;
+    left: 0px;
+    right: 0px;
+    top: 30px;
+    width: -webkit-fit-content;
+    height: -webkit-fit-content;
+    color: black;
+    margin: auto;
+    border-width: initial;
+    border-style: solid;
+    border-color: aquamarine;
+    border-image: initial;
+    padding: 1em;
+    background: white;
+    border-radius: 5%;
+    box-shadow: 2px 3px 8px;
+}
+
+.dialog > form > label,
+.dialog > form > div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.dialog > form > label > img {
+    height: 200px;
+    width: 200px;
+    margin: 0 auto;
+}
+
+.dialog > form > button {
+    margin-top: 10px;
+}

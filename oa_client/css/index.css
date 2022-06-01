@@ -1,0 +1,239 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  min-width: 1500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 80px;
+  background-color: skyblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: #fff;
+  font-weight: 700;
+  position: relative;
+  border-bottom: 2px solid #333;
+}
+
+.header > div {
+  position: absolute;
+  height: 30px;
+  top: 50%;
+  right: 20px;
+  margin-top: -15px;
+  display: flex;
+  align-items: center;
+}
+
+.header > div > a {
+  margin: 0 15px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+}
+
+.content > .nav {
+  width: 200px;
+  box-sizing: border-box;
+  padding: 10px;
+  border-right: 2px solid #333;
+}
+
+.content > .nav > li {
+  height: 30px;
+  cursor: pointer;
+  line-height: 30px;
+}
+
+.content > .nav > li.active,
+.content > .nav > li:hover {
+  background-color: #ccc;
+  color: #fff;
+}
+
+.content > .box {
+  flex: 1;
+  position: relative;
+}
+
+.content > .box > li {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  display: none;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.content > .box > li.active {
+  display: block;
+}
+
+
+.content > .box > li.banner > .title,
+.content > .box > li.users > .title {
+  height: 40px;
+  line-height: 40px;
+  font-weight: 600;
+}
+
+.content > .box > li.banner > .form {
+  float: left;
+  width: 350px;
+  padding: 10px;
+  border: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.content > .box > li.banner > .form.edit {
+  display: none;
+}
+
+.content > .box > li.banner > .form > .show {
+  height: 250px;
+  border: 1px solid #333;
+}
+
+.content > .box > li.banner > .form > .show > div {
+  width: 100%;
+  height: 250px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.content > .box > li.banner > .form > .show > input {
+  display: none;
+}
+
+.content > .box > li.banner > .form > label {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.content > .box > li.banner > .form > label > input {
+  padding-left: 10px;
+}
+
+.content > .box > li.users > table,
+.content > .box > li.banner > table {
+  float: right;
+  min-width: 850px;
+  text-align: center;
+}
+
+.content > .box > li.users > table {
+  min-width: 1300px;
+  float: none;
+}
+
+.content > .box > li.users > .add > button {
+  border: none;
+  background-color: lightgreen;
+  color: #fff;
+  width: 300px;
+  height: 45px;
+}
+
+.content > .box > li.users > .pagination {
+  width: 90%;
+  margin: 20px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.content > .box > li.users > .pagination > ul {
+  display: flex;
+}
+
+.content > .box > li.users > .pagination > ul > li {
+  padding: 3px 10px;
+  margin: 0 5px;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+
+.content > .box > li.users > .pagination > ul > li.other {
+  border: none;
+}
+
+.content > .box > li.users > .pagination > ul > li.other:hover {
+  background-color: #fff;
+  color: #333;
+}
+
+.content > .box > li.users > .pagination > ul > li:hover,
+.content > .box > li.users > .pagination > ul > li.active {
+  background-color: orange;
+  color: #fff;
+}
+
+.content > .box > li.users > .pagination > .first,
+.content > .box > li.users > .pagination > .prev,
+.content > .box > li.users > .pagination > .next,
+.content > .box > li.users > .pagination > .last {
+  padding: 5px 15px;
+  background-color: skyblue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.content > .box > li.users > .pagination > .disable {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.content > .box > li.users > .pagination > input {
+  width: 50px;
+  height: 30px;
+  text-align: center;
+}
+
+.content > .box > li.users > .pagination > button {
+  width: 80px;
+  height: 30px;
+}
+
+.content > .box > li.users > .filter_box {
+  width: 40%;
+  height: 40px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 0 30px 0;
+}
+
+.content > .box > li.users > .filter_box > select {
+  padding-left: 10px;
+}
+
+.content > .box > li.users > .filter_box > input {
+  width: 200px;
+  padding-left: 10px;
+}
+
+.content > .box > li.users > .filter_box > button {
+  padding: 0 5px;
+}
+
+.editor {
+  background-color: aquamarine;
+  display: none;
+}

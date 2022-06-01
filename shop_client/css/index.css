@@ -1,0 +1,35 @@
+.header {
+  height: 80px;
+  background-color: skyblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  color: #fff;
+  position: relative;
+}
+
+.header > span {
+  color: red;
+  font-size: 20px;
+  position: absolute;
+  height: 20px;
+  right: 50px;
+  top: 50%;
+  margin-top: -10px;
+}
+
+.nav {
+  height: 120px;
+  border-bottom: 1px solid #ccc;
+}
+
+.banner {
+  height: 600px;
+  margin: 20px auto;
+}
+
+.banner .item {
+  background-position: center;
+  background-size: 1920px 580px;
+}

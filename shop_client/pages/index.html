@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="stylesheet" href="/static/vander/swiper/swiper-bundle.min.css">
+</head>
+<body>
+  <div class="container header">
+    首页
+    <span>
+      您好
+      {{ if nickname }}
+      {{ nickname }}
+      {{ else }}
+      <a href="/pages/login">请登录</a>
+      {{ /if }}
+    </span>
+  </div>
+
+  <div class="nav container">顶部导航</div>
+
+  <!--
+    我需要利用 swiper 来实现
+      + 因为我的页面是服务端渲染的
+      + 所以我所有的外部资源请求都是向服务器获取
+      + 所以需要把第三方也放在目录结构内, 不能放在 node_modules
+  -->
+  <div class="banner swiper">
+    <div class="swiper-wrapper">
+      {{ each list }}
+      <div class="item swiper-slide" style="background-image: url(http://localhost:8080{{ $value.img_url }})">
+        <a href="{{ $value.link }}" target="_blank" style="display: block; width: 100%; height: 100%"></a>
+      </div>
+      {{ /each }}
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <!-- 如果需要导航按钮 -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+
+  <script src="/static/vander/swiper/swiper-bundle.min.js"></script>
+  <script src="/static/js/index.js"></script>
+</body>
+</html>
