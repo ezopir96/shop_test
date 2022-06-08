@@ -23,7 +23,8 @@ const avatarStorage = multer.diskStorage({
   },
   filename (req, file, cb) {
     const { ext } = path.parse(file.originalname)
-    const filename = `temp${ ext }`
+    const filename = `avatar_${ Date.now() }_${ Math.random().toString().slice(2) }${ ext }`
+    req.filename = filename
     cb(null, filename)
   }
 })

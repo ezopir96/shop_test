@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/vander/bootstrap/bootstrap.min.css">
+<title>商品页面</title>
+<style>
+  .goodsIMG {
+    height: 16rem;
+    width: 100%;
+  }
+  .card {
+    margin: 1.5rem;
+  }
+  .card > .card-body > .card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+	  -webkit-box-orient: vertical;
+	  -webkit-line-clamp: 2;
+  }
+
+  .pagination > .page-item > .bg-info {
+    color: white !important;
+  }
+
+  @media (min-width: 1300px) {
+    .container{
+        max-width: 80vw;
+    }
+  }
+</style>
+</head>
+<body>
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 导航栏 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+  <div></div>
+  <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">商品页面</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:6060/pages/index">首页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:6060/pages/myinfo">个人中心</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+            分类
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" href="#">萌宠宠物</a></li>
+            <li><a class="dropdown-item" href="#">服饰内衣</a></li>
+            <li><a class="dropdown-item" href="#">五金工具</a></li>
+            <li><a class="dropdown-item" href="#">手机电脑</a></li>
+            <li><a class="dropdown-item" href="#">零食食品</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item bg-info" href="#">全部商品</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+            排序
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" href="#">价格升序 ↑</a></li>
+            <li><a class="dropdown-item" href="#">价格降序 ↓</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="http://localhost:6060/pages/carts" class="nav-link">购物车</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+
+
+
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 商品 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+  <div class="container">
+    <div class="row justify-content-center">
+      {{ each goodsInfo }}
+      <div class="card" style="width: 16rem;">
+        <img src="{{ $value.link }}" class="goodsIMG card-img-top" alt="...">
+        <div class="card-body bg-light">
+          <h5 class="card-title">${{ $value.price }}</h5>
+          <p class="card-text">{{ $value.title }}</p>
+        </div>
+        <div class="card-body justify-content-between bg-light">
+          <a href="http://localhost:6060/" class="btn btn-dark card-link">加购物车</a>
+          <a href="#" class="btn btn-dark card-link">直接购买</a>
+        </div>
+      </div>
+      {{ /each }}
+
+    </div>
+  </div>
+
+
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 分页器 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination pagination-lg justify-content-center align-items-stretch">
+      <li class="page-item">
+        <a class="page-link{{ current === 1 ? ' btn bg-secondary text-light disabled' : '' }}" href="http://localhost:6060/pages/goods/prev/{{ current }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {{ if current >= 5 }}
+      <li class="page-item"><a class="page-link{{ current === i ? ' bg-info' : '' }}" href="http://localhost:6060/pages/goods/{{ 1 }}/{{ current }}">1</a></li>
+      <li class="page-item"><a class="page-link" href="javascript;">...</a></li>
+      {{ /if }}
+      
+      {{ if current < 5 }}
+        <% for (let i = 1; i <= 5; i++) {%>
+          <li class="page-item"><a class="page-link{{ current === i ? ' bg-info' : '' }}" href="http://localhost:6060/pages/goods/{{ i }}/{{ current }}">{{ i }}</a></li>
+        <% } %>
+      {{ else if current >= 5 && current <= totalPage - 5 }}
+        <% for (let i = current - 2; i <= current + 2; i++) {%>
+          <li class="page-item"><a class="page-link{{ current === i ? ' bg-info' : '' }}" href="http://localhost:6060/pages/goods/{{ i }}/{{ current }}">{{ i }}</a></li>
+        <% } %>
+      {{ else if current > totalPage - 5 }}
+        <% for (let i = totalPage - 5; i <= totalPage; i++) {%>
+          <li class="page-item"><a class="page-link{{ current === i ? ' bg-info' : '' }}" href="http://localhost:6060/pages/goods/{{ i }}/{{ current }}">{{ i }}</a></li>
+        <% } %>
+      {{ /if }}
+
+      {{ if current <= totalPage - 5 }}
+      <li class="page-item"><a class="page-link" href="javascript;">...</a></li>
+      <li class="page-item"><a class="page-link{{ current === i ? ' bg-info' : '' }}" href="http://localhost:6060/pages/goods/{{ totalPage }}/{{ current }}">{{ totalPage }}</a></li>
+      {{ /if }}
+
+      <li class="page-item">
+        <a class="page-link{{ current === totalPage ? ' btn bg-secondary text-light disabled' : '' }}" href="http://localhost:6060/pages/goods/next/{{ current }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <li>
+        <div class="input-group mb-3" style="height: 100%; width: 8rem;margin-left: 2rem;">
+          <input style="height: 100%;" type="text" class="goTarget form-control" placeholder="{{ current }}" aria-label="Recipient's username" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary btn-success text-white go" type="button" id="button-addon2">Go</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </nav>
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+
+
+<script src="/static/vander/jquery/jquery.min.js"></script>
+<script src="/static/vander/bootstrap/bootstrap.min.js"></script>
+<script>
+  $(function () {
+    $('.go').on('click', () => {
+      console.log('111')
+      const target = $('.goTarget').val()
+      const current = $('.goTarget').attr('placeholder')
+      window.location.href = `http://localhost:6060/pages/goods/${ target }/${ current }`
+    })
+  })
+</script>
+</body>
+</html>

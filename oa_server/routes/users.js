@@ -3,7 +3,7 @@ const router = require('express').Router()
 // 导入中间件
 const { testLogin, testId } = require('../middleware/users')
 // 导入路由处理函数
-const { login, info, editInfo } = require('../controllers/users')
+const { login, info } = require('../controllers/users')
 
 // 登录接口
 // 参数验证, 逻辑处理

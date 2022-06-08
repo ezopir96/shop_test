@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/static/vander/bootstrap/bootstrap.min.css">
+<title>购物车</title>
+
+<style>
+  @media (min-width: 1300px) {
+    .container{
+        max-width: 80vw;
+    }
+  }
+
+  .goodsIMG {
+    height: 10rem;
+    width: 10rem;
+  }
+
+  .table > thead > tr > th {
+    text-align: center;
+  } 
+
+  .table > tbody > tr > th,
+  .table > tbody > tr > td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  .table > tbody > tr > td:nth-child(2) {
+    width: 10rem;
+    
+  }
+  .table > tbody > tr > td:nth-child(3) {
+    width: 16rem;
+    height: 10rem;
+    text-overflow: ellipsis;
+  }
+  .numberControll {
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 导航栏 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+  <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">商品页面</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:6060/pages/index">首页 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="http://localhost:6060/pages/myinfo">个人中心</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+            分类
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" href="#">萌宠宠物</a></li>
+            <li><a class="dropdown-item" href="#">服饰内衣</a></li>
+            <li><a class="dropdown-item" href="#">五金工具</a></li>
+            <li><a class="dropdown-item" href="#">手机电脑</a></li>
+            <li><a class="dropdown-item" href="#">零食食品</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item bg-info" href="#">全部商品</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+            排序
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" href="#">价格升序 ↑</a></li>
+            <li><a class="dropdown-item" href="#">价格降序 ↓</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a href="http://localhost:6060/pages/carts" class="nav-link">购物车</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 购物车列表 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+  <div class="container">
+    <div class="row">
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">序号</th>
+            <th scope="col">封面</th>
+            <th scope="col">商品名</th>
+            <th scope="col">单价</th>
+            <th scope="col">数量</th>
+            <th scope="col">总价</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ each goodsList }}
+          <tr>
+            <th scope="row">1</th>
+            <td>
+              <img class="goodsIMG" src="{{ $value.link }}" alt="">
+            </td>
+            <td class="text-truncate text-wrap">{{ $value.title.substring(0, 40) }}...</td>
+            <td>{{ $value.price }}</td>
+            <td>{{ $value.number }}</td>
+            <td>{{ ($value.price - 0).toFixed(2) * ($value.number - 0).toFixed(2) }}</td>
+            <td>
+              <div class="row justify-content-center">
+
+                <div class="input-group col-lg-3">
+                  <span class="input-group-btn input-group-prepend">
+                    <button class="btn btn-info sub" type="button">-</button>
+                  </span>
+                  <input type="text" class="form-control numberControll" placeholder="{{ $value.number }}" value="{{ $value.number }}">
+                  <span class="input-group-btn input-group-append">
+                    <button class="btn btn-info add" type="button">+</button>
+                  </span>
+                </div>
+                <button class="btn btn-danger delete">删除</button>
+              </div>
+            </td>
+          </tr>
+          {{ /each }}
+        </tbody>
+      </table>      
+    </div>
+  </div>
+
+  
+  
+<script src="/static/vander/jquery/jquery.min.js"></script>
+<script src="/static/vander/bootstrap/bootstrap.min.js"></script>
+<script>
+  $(function () {
+    $('.add').on('click', e => {
+      const input = $(e.target).parent().prev()
+      input.val(input.val() - 0 + 1)
+
+    })
+
+    $('.sub').on('click', e => {
+      const input = $(e.target).parent().next()
+      if (input.val() > 1) input.val(input.val() - 0 - 1)
+    })
+
+    $('.delete').on('click', e => {
+      console.log('delete')
+    })
+  })
+</script>
+</body>
+</html>

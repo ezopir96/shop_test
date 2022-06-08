@@ -16,13 +16,20 @@
       您好
       {{ if nickname }}
       {{ nickname }}
+      <a href="/pages/myinfo">个人中心</a>
+      <button class="unlogin">注销登录</button>
       {{ else }}
       <a href="/pages/login">请登录</a>
+      <a href="/pages/register">点击注册</a>
       {{ /if }}
     </span>
   </div>
 
-  <div class="nav container">顶部导航</div>
+  <div class="nav container">
+    <p>顶部导航</p>
+    <a href="/pages/goods">商品页面</a>
+    <a href="/pages/carts">购物车</a>
+  </div>
 
   <!--
     我需要利用 swiper 来实现
@@ -30,10 +37,10 @@
       + 所以我所有的外部资源请求都是向服务器获取
       + 所以需要把第三方也放在目录结构内, 不能放在 node_modules
   -->
-  <div class="banner swiper">
+  <div class="banner swiper" style="width: 60vw;">
     <div class="swiper-wrapper">
       {{ each list }}
-      <div class="item swiper-slide" style="background-image: url(http://localhost:8080{{ $value.img_url }})">
+      <div class="item swiper-slide" style="background-image: url('http://localhost:8080{{ $value.img_url }}')">
         <a href="{{ $value.link }}" target="_blank" style="display: block; width: 100%; height: 100%"></a>
       </div>
       {{ /each }}
@@ -46,6 +53,7 @@
     <div class="swiper-button-next"></div>
   </div>
 
+  <script src="/static/vander/jquery/jquery.min.js"></script>
   <script src="/static/vander/swiper/swiper-bundle.min.js"></script>
   <script src="/static/js/index.js"></script>
 </body>

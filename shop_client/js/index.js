@@ -14,3 +14,15 @@ new Swiper('.swiper', {
     prevEl: '.swiper-button-prev',
   }
 })
+
+$(function () {
+  $('.unlogin').on('click', async e => {
+
+    const res = await $.ajax({
+      url: 'http://localhost:6060/users/unlogin'
+    })
+
+    console.log(res)
+    window.location.reload()
+  })
+})

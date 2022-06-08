@@ -1,5 +1,6 @@
 // routes/users.js 使用的路由处理函数
 
+
 // 导入数据库模型
 const { PersonModel } = require('../db/model')
 
@@ -20,9 +21,37 @@ const login = async (req, res) => {
   // 代码来到这里, 说明用户存储, 并且账号状态为启用
   // 需要提前向 session 内存储内容
   req.session.info = { id: result.id, username: result.username, nickname: result.nickname }
-  res.send({ code: 1, message: '登录成功' })
+  res.send({ code: 1, message: '登录成功', user_id: result._id })
 }
 
+const register = async (req, res) => {
+  const { username, password } = req.body
+  console.log('收到注册请求', req.body)
+  const cre = await PersonModel.create({
+    username: username,
+    password: password,
+    nickname: 'defult',
+    desc: '这个人很懒，什么都没有写 -_-!',
+    age: 18,
+    gender: '保密',
+    createTime: Date.now(),
+    avater: 'defult.webp'
+  })
+  res.send({
+    code: 1,
+    message: '注册成功！',
+    info: req.body
+  })
+}
+
+const unlogin = async (req, res) => {
+  req.session.info = {}
+  res.send({ code: 1, message: '注销成功' })
+}
+
+
 module.exports = {
-  login
+  login,
+  register,
+  unlogin
 }

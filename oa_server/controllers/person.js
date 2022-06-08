@@ -96,45 +96,19 @@ const editInfo = async (req, res) => {
 // ⭐⭐ 头像名信息如何在修改数据库之前获取 ⭐⭐
 const editChange = async (req, res) => {
 
+  console.log(req.filename)
   const { id } = req.params
-  let avatarName = `/public/avatar/default.webp`
+  // let avatarName = `/public/avatar/default.webp`
 
-  //文件接收器存入 temp 文件，在这里二次命名🤤🤤
-  fs.readdir('./oa_server/public/avatar', function (err, files) {
-    files.forEach(function (file) {
-      if (file.split('.')[0] === 'temp') {
-        avatarName = `/public/avatar/avatar_${ id }_.${ file.split('.')[1] }`
-        fs.rename(`./oa_server/public/avatar/${ file }`,  `./oa_server/${ avatarName }`, async () => {
-          //💀 这里需要把修改数据库操作放在重命名的回调函数内，以实现同步操作，因为读取文件夹操作必须为异步执行 💀
-          if (err) return console.log(err)
-          console.log(file)
-          console.log(avatarName)
-          await PersonModel.findByIdAndUpdate( id, {
-            username: req.body.username,
-            password: req.body.password,
-            nickname: req.body.nickname,
-            age: req.body.age,
-            gender: req.body.gender,
-            desc: req.body.desc,
-            avatar: avatarName
-          })
-        })
-      }
-    })
-  })
-
-  //⭐⭐ 如果没有上传头像则不会进入修改文件的判断，那么也不会修改其他信息，所以需要额外同步修改一次除图片外的信息 ⭐⭐
   await PersonModel.findByIdAndUpdate( id, {
     username: req.body.username,
     password: req.body.password,
     nickname: req.body.nickname,
     age: req.body.age,
     gender: req.body.gender,
-    desc: req.body.desc
+    desc: req.body.desc,
+    avatar: '/public/avatar/' + req.filename
   })
-
-  console.log('aaaa',avatarName)
-  
 
   res.send({
     code: 1,
@@ -142,13 +116,51 @@ const editChange = async (req, res) => {
     info: req.body,
     id: id
   })
+  // //文件接收器存入 temp 文件，在这里二次命名🤤🤤
+  // fs.readdir('./oa_server/public/avatar', function (err, files) {
+  //   files.forEach(function (file) {
+  //     if (file.split('.')[0] === 'temp') {
+  //       avatarName = `/public/avatar/avatar_${ id }_.${ file.split('.')[1] }`
+  //       fs.rename(`./oa_server/public/avatar/${ file }`,  `./oa_server/${ avatarName }`, async () => {
+  //         //💀 这里需要把修改数据库操作放在重命名的回调函数内，以实现同步操作，因为读取文件夹操作必须为异步执行 💀
+  //         if (err) return console.log(err)
+  //         console.log(file)
+  //         console.log(avatarName)
+  //         await PersonModel.findByIdAndUpdate( id, {
+  //           username: req.body.username,
+  //           password: req.body.password,
+  //           nickname: req.body.nickname,
+  //           age: req.body.age,
+  //           gender: req.body.gender,
+  //           desc: req.body.desc,
+  //           avatar: avatarName
+  //         })
+  //       })
+  //     }
+  //   })
+  // })
+
+  // //⭐⭐ 如果没有上传头像则不会进入修改文件的判断，那么也不会修改其他信息，所以需要额外同步修改一次除图片外的信息 ⭐⭐
+  // await PersonModel.findByIdAndUpdate( id, {
+  //   username: req.body.username,
+  //   password: req.body.password,
+  //   nickname: req.body.nickname,
+  //   age: req.body.age,
+  //   gender: req.body.gender,
+  //   desc: req.body.desc
+  // })
+
+  // console.log('aaaa',avatarName)
+  
+
+  
 }
 
 const addUser = async (req, res) => {
 
-  let avatarName = `/public/avatar/default.webp`
-  let fileName = 'defalut.webp'
+  //let avatarName = `/public/avatar/default.webp`
 
+  console.log(req.filename)
   const cre = await PersonModel.create({
     username: req.body.username,
     password: req.body.password,
@@ -157,27 +169,8 @@ const addUser = async (req, res) => {
     age: req.body.age,
     gender: req.body.gender,
     createTime: Date.now(),
-    avatar: avatarName
-  }, function (err, result) {
-    if (!err) {
-      fs.readdir('./oa_server/public/avatar', function (err, files) {
-        files.forEach( async file => {
-          if (file.split('.')[0] === 'temp') {
-            avatarName = `/public/avatar/avatar_${ result._id }_.${ file.split('.')[1] }`
-            fileName = file
-            console.log('命名')
-            await fs.rename(`./oa_server/public/avatar/${ fileName }`, `./oa_server/${ avatarName }`, () => {console.log('改名')})
-            await PersonModel.findByIdAndUpdate( result._id, {
-              avatar: avatarName
-            })
-          }
-        })
-        
-      })
-    }
+    avatar: '/public/avatar/' + req.filename
   })
-
-  
 
 
   res.send({
@@ -200,10 +193,45 @@ const resetUser = async (req, res) => {
       message: '重置密码成功',
       info: id
     })
+  })
+}
 
+const editMyInfo = async (req, res) => {
+
+  const { avatarName } = req.params
+  // 新头像或 undefiend
+  console.log('a = ', req.filename)
+  // 旧头像或 'undefiend'
+  console.log('b = ', avatarName)
+  // 删除旧头像 (仅当有新头像传入并且旧头像存在)
+  if (req.filename && (avatarName !== 'undefined')) fs.unlinkSync('./oa_server/public/avatar/' + avatarName)
+  // 如果有新头像则直接命名, 没有的话则传入旧头像名
+
+  console.log(req.body)
+  const {
+    username,
+    nickname,
+    age,
+    gender,
+    desc
+  } = req.body
+  const id = req.headers.user_id
+  const avatar = req.filename ? req.filename : avatarName
+  console.log('image = ', avatar)
+  await PersonModel.findByIdAndUpdate(id, {
+    username: username,
+    nickname: nickname,
+    age: age,
+    gender: gender,
+    desc: desc,
+    avatar: '/public/avatar/' + avatar
   })
 
-  
+  res.send({
+    code: 1,
+    message: '修改成功',
+    info: req.body
+  })
 }
 
 module.exports = {
@@ -212,5 +240,6 @@ module.exports = {
   editInfo,
   editChange,
   addUser,
-  resetUser
+  resetUser,
+  editMyInfo
 }

@@ -16,6 +16,9 @@ $(function () {
       return
     }
 
+    alert('res.user_id' +  res.user_id)
+    window.sessionStorage.setItem('user_id', res.user_id)
+
     // 跳转页面
     window.location.href = '/pages/index'
   })

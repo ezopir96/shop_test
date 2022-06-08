@@ -22,8 +22,25 @@ const person = new mongoose.Schema({
   createTime: { type: Date, default: Date.now() }
 })
 
+const goods = new mongoose.Schema({
+  title: { type: String, required: true },
+  price: { type: String, default: '100' },
+  link: { type: String, default: 'http://www.baidu.com/' },
+  category: { type: String },
+  createTime: { type: Date, default: Date.now() }
+})
+
+const carts = new mongoose.Schema({
+  user: { type: String, required: true, default: 'null' },
+  goods: { type: String, required: true, default: 'null' },
+  number: { type: Number, default: 0 },
+  price: { type: String, defult: '0' }
+})
+
 // 导出
 module.exports = {
   BannerModel: mongoose.model('banner', banner),
-  PersonModel: mongoose.model('person', person)
+  PersonModel: mongoose.model('person', person),
+  GoodsModel: mongoose.model('goods', goods),
+  CartsModel: mongoose.model('carts', carts)
 }

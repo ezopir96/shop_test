@@ -3,7 +3,7 @@ const router = require('express').Router()
 // 导入中间件
 const { testList, testStatus } = require('../middleware/person')
 // 导入路由处理函数
-const { list, status, editInfo, editChange, addUser, resetUser } = require('../controllers/person')
+const { list, status, editInfo, editChange, addUser, resetUser, editMyInfo } = require('../controllers/person')
 
 const { avatarUpload } = require('../utils/multer')
 
@@ -24,5 +24,8 @@ router.post('/addUser', avatarUpload.single('avatarAdd'), addUser)
 
 //重置用户密码
 router.get('/reset/:id', resetUser)
+
+//shop 端请求数据修改
+router.post('/editMyInfo/:avatarName', avatarUpload.single('avatar'), editMyInfo)
 
 module.exports = router

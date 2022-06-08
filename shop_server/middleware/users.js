@@ -15,7 +15,6 @@ const testLogin = (req, res, next) => {
   next()
 }
 
-
 module.exports = {
   testLogin
 }

@@ -8,7 +8,6 @@ const body = require('body-parser')
 const cookie = require('cookie-parser')
 // 导入 express-session 模块
 const session = require('express-session')
-
 // 导入配置文件
 const { port, expires } = require('./config')
 // 导入路由总表
@@ -16,7 +15,7 @@ const router = require('./routes')
 // 导入数据库模块
 const { connect } = require('./db')
 // 导入全局中间件
-const { empty, error } = require('./middleware')
+const { empty, error, info } = require('./middleware')
 
 const app = express()
 
@@ -37,13 +36,16 @@ app.set('views', path.resolve(__dirname, '../shop_client/pages/'))
 // 配置解析请求头内的 cookie
 app.use(cookie())
 
+app.use(info)
+
 // 配置解析请求体
 app.use(body({ extended: false }))
 app.use(body.json())
 
+
 // 配置使用 session 空间
 app.use(session({
-  secret: 'guoxiang',
+  secret: 'myshop',
   resave: true,
   cookie: { maxAge: expires }
 }))
