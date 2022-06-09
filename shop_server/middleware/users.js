@@ -15,6 +15,18 @@ const testLogin = (req, res, next) => {
   next()
 }
 
+const LoginStat = (req, res, next) => {
+  console.log('登陆状态验证中间件')
+  const { id } = req.session.info ? req.session.info : 'undefined'
+
+  console.log('id = ', id)
+  if (typeof id === 'undefined') next()
+
+  req.id = id
+  next()
+}
+
 module.exports = {
-  testLogin
+  testLogin,
+  LoginStat
 }

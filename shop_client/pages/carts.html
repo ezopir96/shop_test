@@ -110,14 +110,14 @@
         <tbody>
           {{ each goodsList }}
           <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{ $index + 1 }}</th>
             <td>
               <img class="goodsIMG" src="{{ $value.link }}" alt="">
             </td>
             <td class="text-truncate text-wrap">{{ $value.title.substring(0, 40) }}...</td>
-            <td>{{ $value.price }}</td>
-            <td>{{ $value.number }}</td>
-            <td>{{ ($value.price - 0).toFixed(2) * ($value.number - 0).toFixed(2) }}</td>
+            <td class="price">{{ $value.price }}</td>
+            <td class="number">{{ $value.number }}</td>
+            <td class="totalPrice">{{ ($value.price - 0).toFixed(2) * ($value.number - 0).toFixed(2) }}</td>
             <td>
               <div class="row justify-content-center">
 
@@ -125,12 +125,12 @@
                   <span class="input-group-btn input-group-prepend">
                     <button class="btn btn-info sub" type="button">-</button>
                   </span>
-                  <input type="text" class="form-control numberControll" placeholder="{{ $value.number }}" value="{{ $value.number }}">
+                  <input g-id="{{ $index }}" type="text" class="form-control numberControll" placeholder="{{ $value.number }}" value="{{ $value.number }}" data-id="{{ $value.goods }}">
                   <span class="input-group-btn input-group-append">
                     <button class="btn btn-info add" type="button">+</button>
                   </span>
                 </div>
-                <button class="btn btn-danger delete">删除</button>
+                <button class="btn btn-danger delete" data-id="{{ $value.goods }}">删除</button>
               </div>
             </td>
           </tr>
@@ -146,15 +146,49 @@
 <script src="/static/vander/bootstrap/bootstrap.min.js"></script>
 <script>
   $(function () {
-    $('.add').on('click', e => {
+    $('.add').on('click', async e => {
       const input = $(e.target).parent().prev()
-      input.val(input.val() - 0 + 1)
+      const newNumber = input.val() - 0 + 1
 
+      // console.log(input.attr('data-id'))
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/addGoods/${ input.attr('data-id') }/${ newNumber }`
+      })
+
+      console.log(res)
+      if (res.code === 1) input.val(newNumber)
+      
+      if (res.code === 0) return alert('失败')
+
+      const gid = input.attr('g-id') - 0
+      const price = $('.price')[gid].innerText - 0
+      console.log(price)
+      $('.number')[gid].innerText = newNumber
+      $('.totalPrice')[gid].innerText = newNumber * price
+      return
     })
 
-    $('.sub').on('click', e => {
+    $('.sub').on('click', async e => {
       const input = $(e.target).parent().next()
-      if (input.val() > 1) input.val(input.val() - 0 - 1)
+      const newNumber = input.val() - 0 - 1
+      
+      if ((newNumber) <= 0) return console.log(input.val())
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/addGoods/${ input.attr('data-id') }/${ newNumber }`
+      })
+
+      console.log(res)
+
+      if (res.code === 1) input.val(newNumber)
+      
+      if (res.code === 0) return alert('失败')
+
+      const gid = input.attr('g-id') - 0
+      const price = $('.price')[gid].innerText - 0
+      console.log(price)
+      $('.number')[gid].innerText = newNumber
+      $('.totalPrice')[gid].innerText = newNumber * price
+      return
     })
 
     $('.delete').on('click', e => {

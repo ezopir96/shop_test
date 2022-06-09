@@ -4,6 +4,7 @@ const router = require('express').Router()
 const { getBannerList, getUserInfo, getMyInfo } = require('../middleware/pages')
 const { getGoodsList } = require('../middleware/goods')
 const { getCartsList, test } = require('../middleware/carts')
+const { LoginStat } = require('../middleware/users')
 // 专门配置各种页面的路由请求
 router.get('/index', getBannerList, getUserInfo, (req, res) => { res.render('index.html', { list: req.banner, nickname: req.nickname}) })
 router.get('/login', (req, res) => res.render('login.html', {}))
@@ -21,7 +22,10 @@ router.get('/myinfo', getMyInfo, (req, res) => {
 router.get('/goods', getGoodsList, (req, res) => res.render('goods.html', req.goodsList ))
 router.get('/goods/:info/:cur', getGoodsList, (req, res) => res.render('goods.html', req.goodsList ))
 
-router.get('/carts', getCartsList, test, (req, res) => res.render('carts.html', { goodsList: req.goodsList }))
+router.get('/carts', LoginStat, getCartsList, test, (req, res) => {
+  if (typeof req.id === 'undefined') return res.render('login.html', {})
+  res.render('carts.html', { goodsList: req.goodsList })
+})
 
 
 
