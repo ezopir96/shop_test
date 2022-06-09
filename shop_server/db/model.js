@@ -34,7 +34,8 @@ const carts = new mongoose.Schema({
   user: { type: String, required: true, default: 'null' },
   goods: { type: String, required: true, default: 'null' },
   number: { type: Number, default: 0 },
-  price: { type: String, defult: '0' }
+  price: { type: String, defult: '0' },
+  is_selected: { type: Boolean, default: false }
 })
 
 // 导出

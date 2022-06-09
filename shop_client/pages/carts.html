@@ -45,8 +45,8 @@
 <body>
 
 <!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 导航栏 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
-  <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">商品页面</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="http://localhost:6060/pages/goods">商品页面</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -58,29 +58,8 @@
         <li class="nav-item">
           <a class="nav-link" href="http://localhost:6060/pages/myinfo">个人中心</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-            分类
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" href="#">萌宠宠物</a></li>
-            <li><a class="dropdown-item" href="#">服饰内衣</a></li>
-            <li><a class="dropdown-item" href="#">五金工具</a></li>
-            <li><a class="dropdown-item" href="#">手机电脑</a></li>
-            <li><a class="dropdown-item" href="#">零食食品</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item bg-info" href="#">全部商品</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-            排序
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" href="#">价格升序 ↑</a></li>
-            <li><a class="dropdown-item" href="#">价格降序 ↓</a></li>
-          </ul>
-        </li>
+        
+        
         <li class="nav-item">
           <a href="http://localhost:6060/pages/carts" class="nav-link">购物车</a>
         </li>
@@ -110,42 +89,69 @@
         <tbody>
           {{ each goodsList }}
           <tr>
-            <th scope="row">{{ $index + 1 }}</th>
+            <th scope="row">
+              <div class="form-group">
+                <input data-id="{{ $value.goods }}" class="form-control checkStat" type="checkbox" value="option1" {{ $value.is_selected ? "checked" : "" }}>
+                <label class="form-check-label" for="inlineCheckbox1"></label>
+              </div>
+            </th>
             <td>
               <img class="goodsIMG" src="{{ $value.link }}" alt="">
             </td>
             <td class="text-truncate text-wrap">{{ $value.title.substring(0, 40) }}...</td>
             <td class="price">{{ $value.price }}</td>
             <td class="number">{{ $value.number }}</td>
-            <td class="totalPrice">{{ ($value.price - 0).toFixed(2) * ($value.number - 0).toFixed(2) }}</td>
+            <td class="totalPrice">{{ (($value.price - 0) * ($value.number - 0)).toFixed(2) }}</td>
             <td>
               <div class="row justify-content-center">
+                
 
                 <div class="input-group col-lg-3">
-                  <span class="input-group-btn input-group-prepend">
+                  <span class="input-group-btn input-group-prepend flex-nowrap">
                     <button class="btn btn-info sub" type="button">-</button>
                   </span>
-                  <input g-id="{{ $index }}" type="text" class="form-control numberControll" placeholder="{{ $value.number }}" value="{{ $value.number }}" data-id="{{ $value.goods }}">
+                  <input g-id="{{ $index }}" type="text" class="form-control numberControll w-25 p-1" placeholder="{{ $value.number }}" value="{{ $value.number }}" data-id="{{ $value.goods }}">
                   <span class="input-group-btn input-group-append">
                     <button class="btn btn-info add" type="button">+</button>
                   </span>
                 </div>
                 <button class="btn btn-danger delete" data-id="{{ $value.goods }}">删除</button>
+
               </div>
             </td>
           </tr>
           {{ /each }}
+          
         </tbody>
-      </table>      
+      </table>
     </div>
   </div>
 
+<!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 底部控件 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
+<nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
+  
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      
+    </ul>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-primary changeAllBtn">全选</button>
+      <button type="button" class="btn btn-light disabled mr-4 ml-4 payPrice">Middle</button>
+      <button type="button" class="btn btn-danger deleteAll">删除全部</button>
+    </div>
+    <div class="btn-group ml-4 btn-lg" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-success">支付</button>
+    </div>
+  </div>
+</nav>
   
   
 <script src="/static/vander/jquery/jquery.min.js"></script>
 <script src="/static/vander/bootstrap/bootstrap.min.js"></script>
 <script>
   $(function () {
+
     $('.add').on('click', async e => {
       const input = $(e.target).parent().prev()
       const newNumber = input.val() - 0 + 1
@@ -164,7 +170,9 @@
       const price = $('.price')[gid].innerText - 0
       console.log(price)
       $('.number')[gid].innerText = newNumber
-      $('.totalPrice')[gid].innerText = newNumber * price
+      $('.totalPrice')[gid].innerText = (newNumber * price).toFixed(2)
+      calPrice()
+      totalPrice()
       return
     })
 
@@ -187,13 +195,101 @@
       const price = $('.price')[gid].innerText - 0
       console.log(price)
       $('.number')[gid].innerText = newNumber
-      $('.totalPrice')[gid].innerText = newNumber * price
+      $('.totalPrice')[gid].innerText = (newNumber * price).toFixed(2)
+      calPrice()
+      totalPrice()
       return
     })
 
-    $('.delete').on('click', e => {
-      console.log('delete')
+    $('.checkStat').on('click', async e => {
+      console.log($(e.target).prop('checked'))
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/changeStat`,
+        method: 'POST',
+        data: {
+          stat: $(e.target).prop('checked'),
+          goodsID: $(e.target).attr('data-id').replace(/\"/g, '')
+        }
+      })
+
+      if (res.code === 0) alert('添加失败了 - ', res.message)
+      totalPrice()
     })
+
+    // 默认是全选, 如果是全选的状态, 则进行全不选
+    $('.changeAllBtn').on('click', async e => {
+      let stat = false
+      $('.checkStat').each((index, item) => {
+        if (!item.checked) stat = true
+      })
+
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/changeAll`,
+        method: 'POST',
+        data: {
+          stat
+        }
+      })
+
+      if (res.code === 0) alert(res.message)
+
+      $('.checkStat').each((index, item) => {
+        item.checked = res.info.stat
+      })
+
+      window.location.href = 'http://localhost:6060/pages/carts'
+    })
+
+    const totalPrice = async () => {
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/totalPrice`
+      })
+
+      if (res.code === 0) return alert(res.message)
+      
+      $('.payPrice').text('$ ' + parseFloat(res.data.totalPrice).toFixed(2))
+    }
+
+    
+    const calPrice = () => {
+      let count = 0
+      $('.totalPrice').each((index, item) => {
+        console.log(parseFloat(item.innerText))
+        count += parseFloat(item.innerText)
+      })
+      console.log(count.toFixed(2))
+      totalPrice()
+    }
+
+    $('.delete').on('click', async e => {
+      const con = confirm('确认删除？')
+      if (!con) return
+      const goodsID = $(e.target).attr('data-id').replace(/\"/g, '')
+      console.log(goodsID)
+
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/delete/${ goodsID }`
+      })
+
+      if (res.code === 0) alert(res.message)
+
+      alert('删除成功')
+      window.location.reload()
+    })
+
+    $('.deleteAll').on('click', async e => {
+      const con = confirm('确认删除全部？')
+      if (!con) return
+      const res = await $.ajax({
+        url: 'http://localhost:6060/carts/deleteAll'
+      })
+
+      if (res.code === 0) alert(res.message)
+
+      alert('达瓦里希, 全都删掉了, 警惕消费主义陷阱！')
+    })
+    totalPrice()
+
   })
 </script>
 </body>

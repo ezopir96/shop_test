@@ -22,7 +22,7 @@ router.get('/myinfo', getMyInfo, (req, res) => {
 router.get('/goods', getGoodsList, (req, res) => res.render('goods.html', req.goodsList ))
 router.get('/goods/:info/:cur', getGoodsList, (req, res) => res.render('goods.html', req.goodsList ))
 
-router.get('/carts', LoginStat, getCartsList, test, (req, res) => {
+router.get('/carts', LoginStat, getCartsList, (req, res) => {
   if (typeof req.id === 'undefined') return res.render('login.html', {})
   res.render('carts.html', { goodsList: req.goodsList })
 })

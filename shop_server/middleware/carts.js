@@ -14,7 +14,7 @@ const getCartsList = async (req, res, next) => {
   })
 
   console.log('goodsResult', goodsResult)
-  const goodsList = []
+  if (goodsResult.length === 0) next()
   goodsResult.forEach(async (item, index) => {
     await GoodsModel.findById({ _id: item.goods })
       .then((result, err) => {
@@ -23,7 +23,8 @@ const getCartsList = async (req, res, next) => {
           title: result.title,
           link: result.link,
           number: item.number,
-          price: result.price
+          price: result.price,
+          is_selected: item.is_selected
         })
       }).then(() => {
         console.log('req.goodsList m= ', req.goodsList)
@@ -31,20 +32,12 @@ const getCartsList = async (req, res, next) => {
           console.log(' OK ')
           next()
         }
-
       })
-      console.log('req.goodsList 1= ', req.goodsList)
   })
 
-  console.log('req.goodsList 2= ', req.goodsList)
 }
 
-const test = async (req, res, next) => {
-  console.log('测试中间件', req.goodsList)
-  next()
-}
 
 module.exports = {
-  getCartsList,
-  test,
+  getCartsList
 }

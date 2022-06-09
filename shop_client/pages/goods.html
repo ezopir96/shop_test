@@ -37,7 +37,7 @@
 <!-- 🔥🔥🔥🔥🔥🔥🔥🔥🔥 导航栏 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥 -->
   <div></div>
   <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">商品页面</a>
+    <a class="navbar-brand" href="javascript;">商品页面</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -96,7 +96,7 @@
           <p class="card-text">{{ $value.title }}</p>
         </div>
         <div class="card-body justify-content-between bg-light">
-          <a href="http://localhost:6060/" class="btn btn-dark card-link">加购物车</a>
+          <button data-id="{{ $value.id }}" class="btn btn-dark card-link cartBtn">加购物车</button>
           <a href="#" class="btn btn-dark card-link">直接购买</a>
         </div>
       </div>
@@ -165,6 +165,15 @@
       const target = $('.goTarget').val()
       const current = $('.goTarget').attr('placeholder')
       window.location.href = `http://localhost:6060/pages/goods/${ target }/${ current }`
+    })
+    $('.cartBtn').on('click', async e => {
+      const id = $(e.target).attr('data-id').replace(/\"/g,"")
+      console.log(id)
+      const res = await $.ajax({
+        url: `http://localhost:6060/carts/addCarts/${ id }`
+      })
+
+      if (res.code === 0) alert(res.message)
     })
   })
 </script>
