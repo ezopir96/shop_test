@@ -27,6 +27,13 @@ img {
   cursor: pointer;
 }
 
+body {
+  background-repeat: no-repeat;
+  background-position: 0 -10vh;
+  background-size: 100% auto;
+  background-image: url('http://localhost:8080/public/bg/main-bg.jpg');
+}
+
 .container {
   width: 1200px;
   margin: 0 auto;

@@ -49,9 +49,28 @@ const unlogin = async (req, res) => {
   res.send({ code: 1, message: '注销成功' })
 }
 
+const repassword = async (req, res) => {
+  const id = req.id
+
+  console.log(id)
+  const test = await PersonModel.findById({ _id: id })
+  console.log(test)
+  if (test.password !== req.body.oldpassword) return res.send({ code: 2, message: '当前密码错误' })
+  const result = await PersonModel.findByIdAndUpdate({ _id: id }, {
+    "password": req.body.password
+  })
+
+  res.send({
+    code: 1,
+    message: '修改密码成功',
+    data: req.body
+  })
+
+}
 
 module.exports = {
   login,
   register,
-  unlogin
+  unlogin,
+  repassword
 }

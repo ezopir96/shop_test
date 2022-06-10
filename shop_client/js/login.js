@@ -12,11 +12,11 @@ $(function () {
     })
 
     if (res.code === 0) {
-      $('form .error').text(res.message).show()
+      $('form .error').removeClass('invisible')
       return
     }
 
-    alert('res.user_id' +  res.user_id)
+    alert('登录成功')
     window.sessionStorage.setItem('user_id', res.user_id)
 
     // 跳转页面

@@ -17,7 +17,7 @@ new Swiper('.swiper', {
 
 $(function () {
   $('.unlogin').on('click', async e => {
-
+    e.preventDefault()
     const res = await $.ajax({
       url: 'http://localhost:6060/users/unlogin'
     })

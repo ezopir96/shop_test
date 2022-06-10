@@ -215,6 +215,7 @@ const editMyInfo = async (req, res) => {
     gender,
     desc
   } = req.body
+  console.log('flandre = ', username, nickname, age, gender, desc)
   const id = req.headers.user_id
   const avatar = req.filename ? req.filename : avatarName
   console.log('image = ', avatar)
@@ -226,6 +227,7 @@ const editMyInfo = async (req, res) => {
     desc: desc,
     avatar: '/public/avatar/' + avatar
   })
+  console.log('avatar = /public/avatar/', avatar.trim())
 
   res.send({
     code: 1,

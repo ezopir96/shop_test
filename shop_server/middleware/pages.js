@@ -14,17 +14,16 @@ const getBannerList = async (req, res, next) => {
   // 1-2. 是需要把读取出来的数据, 放在后面的路由处理函数内使用
   // 所以我们只需要挂载在指定位置
   req.banner = result
-
   console.log(req.banner)
+
   next()
 }
 
 // 2. 判断是否有用户信息
 const getUserInfo = async (req, res, next) => {
-  console.log('我是userList 中间件, req.session = ', req.session)
   // 拿到 session 空间内是否有信息
+  if (typeof(req) === 'undefined') {return next()}
   const { info } = req.session
-  console.log('session 信息 + ', info)
 
   if (!info) return next()
 

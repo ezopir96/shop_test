@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/form.css">
+</head>
+
+<style>
+  form > label {
+    margin-top: 30px;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+  }
+  form > label:first-child {
+    width: 200px;
+    margin: 0 auto;
+  }
+  .descLabel{
+    height: auto;
+    display: flex;
+    align-items: flex-start;
+  }
+  form > label > input {
+    margin-right: 0px;
+  }
+  textarea {
+    resize: none;
+  }
+  img {
+    height: 200px;
+    width: 200px;
+    border-radius: 100px;
+  }
+</style>
+
+<body>
+
+  <h1><a href="/pages/index">登录页面</a></h1>
+
+  <form>
+    <label for="avatar">
+      <input id="avatar" class="avatar" type="file" name="avatar" style="display: none;">
+      <img class="avatarIMG" d-avatar="{{ if info.avatar }}{{ info.avatar }}{{ else }}/public/avatar/default.webp{{ /if }}" src="http://localhost:8080{{ if info.avatar }}{{ info.avatar }}{{ else }}/public/avatar/default.webp{{ /if }}" alt="">
+    </label>
+    <label>
+      用户名 : <input name="username" type="text" value="{{ info.username }}">
+    </label>
+    <label>
+      昵&nbsp;称 : <input name="nickname" type="text" value="{{ info.nickname }}">
+    </label>
+    <label>
+      年&nbsp;龄 : <input type="text" name="age" value="{{ info.age }}">
+    </label>
+    <label class="gender">
+      性 别 : <select name="gender" id="gender">
+        <option value="男" {{ info.gender === '男' ? 'selected' : '' }}>男</option>
+        <option value="女" {{ info.gender === '女' ? 'selected' : '' }}>女</option>
+        <option value="保密" {{ info.gender === '保密' ? 'selected' : '' }}>保密</option>
+      </select>
+    </label>
+    <label class="descLabel">
+      个人描述 : <textarea name="desc" id="desc" cols="24" rows="4">{{ info.desc }}</textarea>
+    </label>
+    <p style="text-align: center;">
+      <a href="/pages/repassword">修改密码</a>
+    </p>
+    <button>确认修改</button>
+  </form>
+
+<script src="/static/vander/jquery/jquery.min.js"></script>
+<script>
+  $(function () {
+    $('form').on('submit', async e => {
+      e.preventDefault()
+
+      console.log(e.target)
+      const fm = new FormData(e.target)
+      const id = window.sessionStorage.getItem('user_id')
+      console.log(fm)
+      const avatarName = $('.avatarIMG').attr('d-avatar').split('avatar/')[1]
+      console.log(avatarName)
+      const res = await $.ajax({
+        url: 'http://localhost:8080/person/editMyInfo/' + avatarName,
+        method: 'POST',
+        data: fm,
+        headers: {'user_id': id},
+        processData: false,
+        contentType: false
+      })
+
+      
+      if (res.code !== 1) return alert(res.message)
+      console.log(res)
+      alert(res.message)
+    })
+
+    //页面接受上传图片
+    $('.avatar').on('change', async function(e) {
+      const fr = new FileReader()
+      fr.readAsDataURL(this.files[0])
+
+      fr.onload = res => {
+        $(this).next().attr('src', res.currentTarget.result)
+      }
+    })
+  })
+
+  
+</script>
+</body>
+</html>

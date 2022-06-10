@@ -7,26 +7,44 @@
   <title>Document</title>
   <link rel="stylesheet" href="/static/css/base.css">
   <link rel="stylesheet" href="/static/css/form.css">
+  <link rel="stylesheet" href="/static/vander/bootstrap/bootstrap.min.css">
 </head>
 <body>
 
-  <h1>登录页面</h1>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:6060/pages/index"><span class="h4 text-light">回到主页</span><span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
 
-  <form>
-    <span class="error">登录失败, 用户名密码错误</span>
-    <label>
-      用户名 : <input name="username" type="text">
-    </label>
-    <label>
-      密码 : <input name="password" type="text">
-    </label>
-    <p>
-      还没有账号 <a href="/pages/register">去注册</a>
-    </p>
-    <button>登录</button>
+  <form class="mainForm">
+    <div class="form-group">
+      <small id="usernameHelp" class="form-text text-danger invisible error">登录失败, 用户名密码错误</small>
+      <label for="username">用户名 : </label>
+      <input id="username" class="form-control" name="username" type="text" aria-describedby="usernameHelp">
+      
+      <label for="password">密码 : </label>
+      <input id="password" class="form-control" name="password" type="text">
+      <p>
+        还没有账号? <a class="btn btn-sm btn-secondary text-light mt-2" href="/pages/register">去注册</a>
+      </p>
+      <button class="btn btn-success mw-100" style="width: 100%;">登录</button>
+    </div>
   </form>
 
   <script src="/static/vander/jquery/jquery.min.js"></script>
+  <script src="/static/vander/bootstrap/bootstrap.min.js"></script>
   <script src="/static/js/login.js"></script>
 </body>
 </html>

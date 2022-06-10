@@ -1,15 +1,16 @@
-form {
-  width: 400px;
+.mainForm {
+  width: 35vw;
   padding: 20px;
-  border: 3px solid pink;
   margin: 50px auto;
   display: flex;
   flex-direction: column;
   padding-top: 50px;
   position: relative;
+  background-color: rgba(255, 255, 255, .8);
+  border-radius: .4rem;
 }
 
-form > .error {
+.mainForm > .error {
   position: absolute;
   left: 50%;
   top: 10px;
@@ -20,12 +21,12 @@ form > .error {
   display: none;
 }
 
-form > label {
+.mainForm > label {
   height: 50px;
   display: flex;
   align-items: center;
 }
 
-form > label > input {
+.mainForm > label > input {
   padding-left: 20px;
 }

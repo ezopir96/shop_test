@@ -5,77 +5,137 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
-  <link rel="stylesheet" href="/static/css/base.css">
-  <link rel="stylesheet" href="/static/css/form.css">
-</head>
 
+<link rel="stylesheet" href="/static/css/form.css">
+<link rel="stylesheet" href="/static/vander/bootstrap/bootstrap.min.css">
 <style>
-  form > label {
-    margin-top: 30px;
-    height: auto;
-    display: flex;
-    justify-content: space-between;
+  * {
+    color: #666;
   }
-  form > label:first-child {
-    width: 200px;
-    margin: 0 auto;
+  .avatarLabel {
+    max-width: 50%;
+    
   }
-  .descLabel{
-    height: auto;
-    display: flex;
-    align-items: flex-start;
-  }
-  form > label > input {
-    margin-right: 0px;
+  .avatarIMG {
+    border-radius: 50%;
   }
   textarea {
     resize: none;
   }
-  img {
-    height: 200px;
-    width: 200px;
-    border-radius: 100px;
+  .repasswordForm {
+    width: 100%;
+  }
+  .mainForm {
+    background-color: rgba(255, 255, 255, .8);
+    border-radius: .4rem;
+  }
+  body {
+    background-repeat: no-repeat;
+    background-position: 0 -10vh;
+    background-size: 100% auto;
+    background-image: url('http://localhost:8080/public/bg/main-bg.jpg');
   }
 </style>
-
+</head>
 <body>
-
-  <h1><a href="/pages/index">登录页面</a></h1>
-
-  <form>
-    <label for="avatar">
-      <input id="avatar" class="avatar" type="file" name="avatar" style="display: none;">
-      <img class="avatarIMG" d-avatar="{{ if info.avatar }}{{ info.avatar }}{{ else }}/public/avatar/default.webp{{ /if }}" src="http://localhost:8080{{ if info.avatar }}{{ info.avatar }}{{ else }}/public/avatar/default.webp{{ /if }}" alt="">
-    </label>
-    <label>
-      用户名 : <input name="username" type="text" value="{{ info.username }}">
-    </label>
-    <label>
-      昵&nbsp;称 : <input name="nickname" type="text" value="{{ info.nickname }}">
-    </label>
-    <label>
-      年&nbsp;龄 : <input type="text" name="age" value="{{ info.age }}">
-    </label>
-    <label class="gender">
-      性 别 : <select name="gender" id="gender">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:6060/pages/index"><span class="h4 text-light">回到主页</span><span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+  
+  <form class="mainForm">
+    <div class="form-group  d-flex justify-content-center">
+      <label class="avatarLabel" for="avatar">
+        <img class="avatarIMG img-thumbnail img-fluid" d-avatar="{{ if info.avatar }}{{ info.avatar }}{{ else }}/public/avatar/default.webp{{ /if }}" src="http://localhost:8080{{ if info.avatar }}{{ info.avatar }}{{ else }}/public/avatar/default.webp{{ /if }}" alt="">
+        <input id="avatar" type="file" name="avatar" class="avatar form-control-file" style="display: none;">
+      </label>
+    </div>
+    <div class="form-group">
+      <label for="username">用户名</label>
+      <input value="{{ info.username }}" name="username" type="text" class="form-control" id="username" aria-describedby="usernameHelp">
+      <small id="usernameHelp" style="line-height: -10px; margin-bottom: -10px;" class="form-text text-danger invisible">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+      <label for="nickname">昵称</label>
+      <input value="{{ info.nickname }}" name="nickname" type="text" class="form-control" id="nickname" aria-describedby="nicknameHelp">
+    </div>
+    <div class="form-group">
+      <label for="age">年龄</label>
+      <input value="{{ info.age }}" name="age" type="number" class="form-control" id="age">
+    </div>
+    <div class="form-group">
+      <label for="gender">性别</label>
+      <select value="{{ info.age }}" name="gender" class="form-control" id="gender">
         <option value="男" {{ info.gender === '男' ? 'selected' : '' }}>男</option>
         <option value="女" {{ info.gender === '女' ? 'selected' : '' }}>女</option>
         <option value="保密" {{ info.gender === '保密' ? 'selected' : '' }}>保密</option>
       </select>
-    </label>
-    <label class="descLabel">
-      个人描述 : <textarea name="desc" id="desc" cols="24" rows="4">{{ info.desc }}</textarea>
-    </label>
-    <p style="text-align: center;">
-      <a href="/pages/repassword">修改密码</a>
-    </p>
-    <button>确认修改</button>
+    </div>
+    <div class="form-group">
+      <label for="desc">个人描述</label>
+      <textarea class="form-control" name="desc" id="desc" cols="24" rows="3">{{ info.desc }}</textarea>
+      <small id="usernameHelp" class="form-text text-muted">仅限 50 字.</small>
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#rePass">
+        修改密码 >>
+      </button>
+    </div>
+    <button class="btn btn-primary">确认修改</button>
   </form>
 
-<script src="/static/vander/jquery/jquery.min.js"></script>
+  <div class="modal fade" id="rePass" tabindex="-1" aria-labelledby="rePassLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="rePassLabel">修改密码</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="repasswordForm">
+            <div class="form-group">
+              <label for="oldpassword">请输入当前密码</label>
+              <small id="oldpassword" class="form-text text-danger d-inline invisible">密码错误</small>
+              <input class="form-control" type="password" name="oldpassword" id="oldpassword">
+            </div>
+            <div class="form-group">
+              <label for="password">请输入新密码</label>
+              <input class="form-control" type="password" name="password" id="password">
+            </div>
+            <div class="form-group">
+              <label for="repassword">请确认新密码</label>
+              <small id="newpassword" class="form-text text-danger d-inline invisible">两次密码不一致</small>
+              <input class="form-control" type="password" name="repassword" id="repassword">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary changePass">保存更改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/vander/jquery/jquery.min.js"></script>
+  <script src="/static/vander/bootstrap/bootstrap.min.js"></script>
 <script>
   $(function () {
-    $('form').on('submit', async e => {
+    $('.mainForm').on('submit', async e => {
       e.preventDefault()
 
       console.log(e.target)
@@ -101,16 +161,52 @@
 
     //页面接受上传图片
     $('.avatar').on('change', async function(e) {
+      console.log('111')
       const fr = new FileReader()
       fr.readAsDataURL(this.files[0])
-
       fr.onload = res => {
-        $(this).next().attr('src', res.currentTarget.result)
+        console.log(res.currentTarget.result)
+        $(this).prev().attr('src', res.currentTarget.result)
+      }
+    })
+
+
+    //修改密码
+    $('.changePass').on('click', async e => {
+
+      if ($('#repassword').val() !== $('#password').val()) return
+
+      const data = $('.repasswordForm').serialize()
+      const res = await $.ajax({
+        url: 'http://localhost:6060/users/repassword',
+        method: 'POST',
+        data: data
+      })
+
+      if (res.code === 0) return
+
+      if (res.code === 2) $('#oldpassword').removeClass('invisible')
+
+      console.log(res.data)
+      if (res.code === 1) {
+        $('#rePass').modal('hide')
+        alert('修改成功')
+        $.ajax({ url: 'http://localhost:6060/users/unlogin' })
+        window.location.href = 'http://localhost:6060/pages/login'
+      }
+    })
+
+    $('#repassword').on('input', e => {
+      console.log($(e.target).val())
+      console.log($('#password').val())
+
+      if ($(e.target).val() !== $('#password').val()) {
+        $('#newpassword').removeClass('invisible')
+      } else {
+        $('#newpassword').addClass('invisible')
       }
     })
   })
-
-  
 </script>
 </body>
 </html>

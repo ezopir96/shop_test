@@ -9,22 +9,9 @@
   <link rel="stylesheet" href="/static/css/index.css">
   <link rel="stylesheet" href="/static/vander/swiper/swiper-bundle.min.css">
   <link rel="stylesheet" href="/static/vander/bootstrap/bootstrap.min.css">
+  
 </head>
 <body>
-  <!-- <div class="container header">
-    首页
-    <span>
-      您好
-      {{ if nickname }}
-      {{ nickname }}
-      <a href="/pages/myinfo">个人中心</a>
-      <button class="unlogin">注销登录</button>
-      {{ else }}
-      <a href="/pages/login">请登录</a>
-      <a href="/pages/register">点击注册</a>
-      {{ /if }}
-    </span>
-  </div> -->
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,22 +20,26 @@
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav mr-auto my-2 my-lg-0 navbar-nav-scroll" style="max-height: 100px;">
         {{ if nickname }}
-        <li class="nav-item active">
-          <span class="text-white">{{ nickname }}</span>
+        <li class="nav-item active mr-5">
+          <span class="h1 text-white">{{ nickname }} </span><span class="text-white">Ciallo～(∠・ω< )</span>
         </li>
         <li class="nav-item active">
           <a class="nav-link" href="http://localhost:6060/pages/myinfo">个人中心<span class="sr-only">(current)</span></a>
         </li>
-        {{ else }}
-          <a class="nav-link" href="/pages/login">请登录</a>
-          <a class="nav-link" href="/pages/register">点击注册</a>
-        {{ /if }}
-        <li class="nav-item">
-          <a href="http://localhost:6060/pages/carts" class="nav-link">购物车</a>
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:6060/pages/carts">购物车<span class="sr-only">(current)</span></a>
         </li>
-        
+        {{ else }}
+          <a class="nav-link btn btn-success text-white" href="/pages/login">请登录</a>
+          <a class="nav-link text-white" href="/pages/register">点击注册</a>
+        {{ /if }}
+        <li class="nav-item active">
+          <a class="nav-link" href="http://localhost:6060/pages/goods">商品页面<span class="sr-only">(current)</span></a>
+        </li>
       </ul>
-      <button class="btn btn-danger unlogin mr-2">注销登录</button>
+      {{ if nickname }}
+      <button class="btn btn-danger mr-2 unlogin">注销登录</button>
+      {{ /if }}
       <form class="d-flex">
         <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -56,34 +47,26 @@
     </div>
   </nav>
 
-  <div class="nav container">
-    <p>顶部导航</p>
-    <a href="/pages/goods">商品页面</a>
-    <a href="/pages/carts">购物车</a>
-  </div>
+    <div class="container" style="background: rgba(255, 255, 255, .5);">
+      <div class="row">
+        <div class="banner swiper" style="width: 55vw;">
+          <div class="swiper-wrapper">
+            
+            {{ each list }}
+            <div class="item swiper-slide" style="background-image: url('http://localhost:8080{{ $value.img_url }}')">
+              <a href="{{ $value.link }}" target="_blank" style="display: block; width: 100%; height: 100%"></a>
+            </div>
+            {{ /each }}
+          </div>
+    
+          <div class="swiper-pagination"></div>
+    
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
 
-  <!--
-    我需要利用 swiper 来实现
-      + 因为我的页面是服务端渲染的
-      + 所以我所有的外部资源请求都是向服务器获取
-      + 所以需要把第三方也放在目录结构内, 不能放在 node_modules
-  -->
-  <div class="banner swiper" style="width: 60vw;">
-    <div class="swiper-wrapper">
-      {{ each list }}
-      <div class="item swiper-slide" style="background-image: url('http://localhost:8080{{ $value.img_url }}')">
-        <a href="{{ $value.link }}" target="_blank" style="display: block; width: 100%; height: 100%"></a>
       </div>
-      {{ /each }}
     </div>
-    <!-- 如果需要分页器 -->
-    <div class="swiper-pagination"></div>
-
-    <!-- 如果需要导航按钮 -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-  </div>
-
   <script src="/static/vander/jquery/jquery.min.js"></script>
   <script src="/static/vander/swiper/swiper-bundle.min.js"></script>
   <script src="/static/vander/bootstrap/bootstrap.min.js"></script>
