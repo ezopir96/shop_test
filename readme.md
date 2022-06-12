@@ -49,3 +49,35 @@
   + 添加内容到购物车
   + 购物车全套增删改查
 
+
+## 数据库格式
+
+  - oa 账户集合 (users)
+    + user002
+    + 1234562
+  - shop 用户集合 (people)
+    + username (使用的:user555)
+    + password (使用的:123321)
+    + nickname
+    + age
+    + gender  男 | 女 | 保密
+    + avatar  本地地址 /public/avatar/default.webp
+    + is_status Boolean
+    + createTime
+  - 轮播图集合 (banners)
+    + title 
+    + img_url 轮播图图片地址
+    + link 轮播图点击跳转地址
+    + createTime 创建时间
+  - 商品集合 (goods)
+    + title
+    + price 商品价格
+    + link 商品图片
+    + category
+    + createTime
+  - 购物车集合 (carts)
+    + user  用户ID
+    + goods 商品ID
+    + number  数量
+    + price 单价
+    + is_selected 是否被选中
